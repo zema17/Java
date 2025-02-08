@@ -1,97 +1,96 @@
+
 import java.util.ArrayList;
 import java.util.Scanner;
 
-class Student {
-    private int id;
+// Lớp Contact để lưu thông tin liên hệ
+class Contact {
     private String name;
-    private int age;
+    private String phone;
 
-    public Student(int id, String name, int age) {
-        this.id = id;
+    public Contact(String name, String phone) {
         this.name = name;
-        this.age = age;
-    }
-
-    public int getId() {
-        return id;
+        this.phone = phone;
     }
 
     public String getName() {
         return name;
     }
 
-    public int getAge() {
-        return age;
+    public String getPhone() {
+        return phone;
     }
 
     @Override
     public String toString() {
-        return "ID: " + id + ", Name: " + name + ", Age: " + age;
+        return "Name: " + name + ", Phone: " + phone;
     }
 }
 
-class StudentManager {
-    private ArrayList<Student> students = new ArrayList<>();
+// Lớp ContactManager để quản lý danh bạ
+class ContactManager {
+    private ArrayList<Contact> contacts = new ArrayList<>();
 
-    public void addStudent(int id, String name, int age) {
-        students.add(new Student(id, name, age));
-        System.out.println("Student added successfully.");
+    public void addContact(String name, String phone) {
+        contacts.add(new Contact(name, phone));
+        System.out.println("✅ Đã thêm liên hệ thành công!");
     }
 
-    public void removeStudent(int id) {
-        students.removeIf(student -> student.getId() == id);
-        System.out.println("Student removed successfully.");
+    public void removeContact(String name) {
+        contacts.removeIf(contact -> contact.getName().equalsIgnoreCase(name));
+        System.out.println("✅ Đã xóa liên hệ (nếu tồn tại)!");
     }
 
-    public void displayStudents() {
-        if (students.isEmpty()) {
-            System.out.println("No students available.");
+    public void displayContacts() {
+        if (contacts.isEmpty()) {
+            System.out.println("📭 Danh bạ trống.");
         } else {
-            for (Student student : students) {
-                System.out.println(student);
+            System.out.println("📞 Danh bạ của bạn:");
+            for (Contact contact : contacts) {
+                System.out.println(contact);
             }
         }
     }
 }
 
+// Lớp chính chứa menu điều khiển
 public class Main {
     public static void main(String[] args) {
-        try (Scanner scanner = new Scanner(System.in)) {
-            StudentManager manager = new StudentManager();
-            
-            while (true) {
-                System.out.println("1. Add Student");
-                System.out.println("2. Remove Student");
-                System.out.println("3. Display Students");
-                System.out.println("4. Exit");
-                System.out.print("Choose an option: ");
-                
-                int choice = scanner.nextInt();
-                switch (choice) {
-                    case 1:
-                        System.out.print("Enter ID: ");
-                        int id = scanner.nextInt();
-                        scanner.nextLine(); 
-                        System.out.print("Enter Name: ");
-                        String name = scanner.nextLine();
-                        System.out.print("Enter Age: ");
-                        int age = scanner.nextInt();
-                        manager.addStudent(id, name, age);
-                        break;
-                    case 2:
-                        System.out.print("Enter ID to remove: ");
-                        int removeId = scanner.nextInt();
-                        manager.removeStudent(removeId);
-                        break;
-                    case 3:
-                        manager.displayStudents();
-                        break;
-                    case 4:
-                        System.out.println("Exiting...");
-                        return;
-                    default:
-                        System.out.println("Invalid option. Try again.");
-                }
+        Scanner scanner = new Scanner(System.in);
+        ContactManager manager = new ContactManager();
+
+        while (true) {
+            System.out.println("\n📱 QUẢN LÝ DANH BẠ 📱");
+            System.out.println("1. Thêm liên hệ");
+            System.out.println("2. Xóa liên hệ");
+            System.out.println("3. Hiển thị danh bạ");
+            System.out.println("4. Thoát");
+            System.out.print("Chọn chức năng: ");
+
+            int choice = scanner.nextInt();
+            scanner.nextLine(); // Đọc bỏ dòng thừa
+
+            switch (choice) {
+                case 1:
+                    System.out.print("Nhập tên: ");
+                    String name = scanner.nextLine();
+                    System.out.print("Nhập số điện thoại: ");
+                    String phone = scanner.nextLine();
+                    manager.addContact(name, phone);
+                    break;
+                case 2:
+                    System.out.print("Nhập tên cần xóa: ");
+                    String removeName = scanner.nextLine();
+                    manager.removeContact(removeName);
+                    break;
+                case 3:
+                    manager.displayContacts();
+                    break;
+                case 4:
+                    System.out.println("👋 Thoát chương trình...");
+                    scanner.close();
+                    return;
+                default:
+                    System.out.println("⚠️ Lựa chọn không hợp lệ! Vui lòng thử lại.");
             }
         }
     }
